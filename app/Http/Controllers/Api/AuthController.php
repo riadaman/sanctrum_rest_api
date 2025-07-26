@@ -122,4 +122,33 @@ class AuthController extends Controller
         }
     }
 
+    public function userLogout(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            if ($user) {
+                $user->currentAccessToken()->delete();
+                return ResponseHelper::success(
+                    null,
+                    'User logged out successfully',
+                    'success',
+                    200
+                );
+            } else {
+                return ResponseHelper::error(
+                    'User not found',
+                    'error',
+                    404
+                );
+            }
+        } catch (Exception $e) {
+            Log::error('User logout failed: ' . $e->getMessage() . '-Line: ' . $e->getLine());
+            return ResponseHelper::error(
+                'User logout failed',
+                'error',
+                500
+            );
+        }
+    }
+
 }
