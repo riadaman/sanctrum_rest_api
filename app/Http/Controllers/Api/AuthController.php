@@ -94,5 +94,32 @@ class AuthController extends Controller
                 );
           }
     }
+    public function userProfile(Request $request)
+    {
+        try {
+           $user = Auth::user();
+            if($user){
+                return ResponseHelper::success(
+                    $user,
+                    'User profile retrieved successfully',
+                    'success',
+                    200
+                );
+            } else {
+                return ResponseHelper::error(
+                    'User not found',
+                    'error',
+                    404
+                );
+            }
+        } catch (Exception $e) {
+            Log::error('Failed to retrieve user profile: ' . $e->getMessage() . '-Line: ' . $e->getLine());
+            return ResponseHelper::error(
+                'Failed to retrieve user profile',
+                'error',
+                500
+            );
+        }
+    }
 
 }
